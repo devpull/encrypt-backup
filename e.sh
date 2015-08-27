@@ -9,16 +9,16 @@ log "+++ Starting session"
 
 # conf
 #
-# ammount of backups in days
-# last are erased before begin to enc one more
+# number of archives to store(newest stays)
 HOLD_BCKS=3
-# how much new archives will stay
+# number of enc'ted archives to store(newest stays)
 HOLD_ENC=1
-
 # raw storage
 BCK_DIR='/d/www/encr_bck/bck'
 # enc storage
 ENC_DIR='/d/www/encr_bck/enc'
+#
+# fnoc
 
 # required dirs
 if [[ ! -d ${BCK_DIR} ]]; then mkdir ${BCK_DIR} ; fi
@@ -34,7 +34,22 @@ if [[ ! -z ${REM_GZ_LST// } ]]; then
     log $'Removing...\n'"$REM_GZ_LST"
     rm -f ${REM_GZ_LST}
 else
-    log 'Nothing to remove.'
+    log "Nothing to remove in bck: ${BCK_DIR}"
+fi
+
+# clearing stored enc'ted files
+log "Checking for .enc to remove"
+if [[ ${HOLD_ENC} -le 1 ]]; then
+    log "Storing one enc, so clearing enc dir: ${ENC_DIR}"
+    rm -f ${ENC_DIR}/*
+else
+    REM_ENC_LST=$(ls -t ${ENC_DIR}/* | awk "NR>${HOLD_ENC}")
+    if [[ ! -z ${REM_ENC_LST// } ]]; then
+        log $'Removing...\n'"$REM_ENC_LST"
+        rm -f ${REM_ENC_LST}
+    else
+        log "Nothing to remove in enc: ${ENC_DIR}"
+    fi
 fi
 
 # getting latest archive to enc
