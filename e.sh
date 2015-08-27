@@ -1,17 +1,21 @@
 #!/bin/bash
 # enc
 
+. ./log.sh
+
 DATE=$(date +%H:%M)
 
 # required dirs
-if [[ ! -e bck ]]; then mkdir bck fi
-if [[ ! -e enc ]]; then mkdir enc fi
+if [[ ! -d bck ]]; then mkdir bck ; fi
+if [[ ! -d enc ]]; then mkdir enc ; fi
+if [[ ! -d logs ]]; then mkdir logs ; fi
 
 # ammount of backups in days
 # last are erased before begin to enc one more
 HOLD_BCKS=3
 # raw storage
-BCK_FOLDER='.'
+BCK_DIR='./bck'
+ENC_DIR='./enc'
 
 
 # ls -p | grep -v /
