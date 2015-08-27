@@ -7,25 +7,29 @@
 
 log "+++ Starting session"
 
-DATE=$(date +%d%m%Y)
-
-# required dirs
-if [[ ! -d bck ]]; then mkdir bck ; fi
-if [[ ! -d enc ]]; then mkdir enc ; fi
-if [[ ! -d logs ]]; then mkdir logs ; fi
-if [[ ! -d reg ]]; then mkdir reg ; fi
-
+# conf
+#
 # ammount of backups in days
 # last are erased before begin to enc one more
 HOLD_BCKS=3
-# raw storage
-BCK_DIR='./bck'
-ENC_DIR='./enc'
+# how much new archives will stay
+HOLD_ENC=1
 
-# we only need last 3 newest files in bck directory
+# raw storage
+BCK_DIR='/d/www/encr_bck/bck'
+# enc storage
+ENC_DIR='/d/www/encr_bck/enc'
+
+# required dirs
+if [[ ! -d ${BCK_DIR} ]]; then mkdir ${BCK_DIR} ; fi
+if [[ ! -d ${ENC_DIR} ]]; then mkdir ${ENC_DIR} ; fi
+if [[ ! -d logs ]]; then mkdir logs ; fi
+if [[ ! -d reg ]]; then mkdir reg ; fi
+
+# we only need last $HOLD_BCKS newest files in bck directory
 # sorted by modified time
 log "Checking for gzip's to remove"
-REM_GZ_LST=$(ls -t $PWD/bck/* | awk 'NR>3')
+REM_GZ_LST=$(ls -t ${BCK_DIR}/* | awk "NR>${HOLD_BCKS}")
 if [[ ! -z ${REM_GZ_LST// } ]]; then
     log $'Removing...\n'"$REM_GZ_LST"
     rm -f ${REM_GZ_LST}
@@ -34,8 +38,8 @@ else
 fi
 
 # getting latest archive to enc
-LATEST_GZIP=$(ls -t $PWD/bck/* | awk 'NR==1')
-LATEST_NAME=$(ls -t ./bck | awk 'NR==1')
+LATEST_GZIP=$(ls -t ${BCK_DIR}/* | awk 'NR==1')
+LATEST_NAME=$(ls -t ${BCK_DIR} | awk 'NR==1')
 log "Latest - ${LATEST_NAME}"
 
 # check if archive is present in archiving registry(reg.lst)
