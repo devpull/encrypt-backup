@@ -1,7 +1,11 @@
 #!/bin/bash
-# enc
+# encrypting archives
 
+# inc
 . ./log.sh
+. ./reg.sh
+
+log "+++ Starting session"
 
 DATE=$(date +%d%m%Y)
 
@@ -9,6 +13,7 @@ DATE=$(date +%d%m%Y)
 if [[ ! -d bck ]]; then mkdir bck ; fi
 if [[ ! -d enc ]]; then mkdir enc ; fi
 if [[ ! -d logs ]]; then mkdir logs ; fi
+if [[ ! -d reg ]]; then mkdir reg ; fi
 
 # ammount of backups in days
 # last are erased before begin to enc one more
@@ -30,12 +35,24 @@ else
     log 'Nothing to remove.'
 fi
 
-# check if archive is present in archiving registry(reg.lst)
-
 # getting latest archive to enc
 LATEST_GZIP=$(ls -t $PWD/bck/* | awk 'NR==1')
-echo $LATEST_GZIP
+LATEST_NAME=$(ls -t ./bck | awk 'NR==1')
+echo "Latest - ${LATEST_NAME}"
+log "Latest - ${LATEST_NAME}"
 
+# check if archive is present in archiving registry(reg.lst)
+REG_CHECK=$(grep "$LATEST_NAME" ./reg/reg.lst)
+if [[ ! -z ${REG_CHECK// } ]]; then
+    echo "Already enc'ted ${LATEST_NAME}. Exiting."
+    log "Already enc'ted ${LATEST_NAME}. Exiting."
+    log "--- Ending session"
+    exit 0
+fi
 
-#openssl smime -encrypt -aes256 -in secret.txt -binary -outform DEM -out secret.txt.enc bckpub.pem
+# enc
+log "Starting to enc $LATEST_GZIP"
+openssl smime -encrypt -aes256 -in ${LATEST_GZIP} -binary -outform DEM -out ./enc/${LATEST_NAME}.enc bckpub.pem
 
+reg "$LATEST_NAME"
+log "--- Ending session"
