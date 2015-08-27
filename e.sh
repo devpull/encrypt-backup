@@ -27,32 +27,29 @@ ENC_DIR='./enc'
 log "Checking for gzip's to remove"
 REM_GZ_LST=$(ls -t $PWD/bck/* | awk 'NR>3')
 if [[ ! -z ${REM_GZ_LST// } ]]; then
-    echo "Removing..."
-    log "Removing...\n${REM_GZ_LST}"
+    log $'Removing...\n'"$REM_GZ_LST"
     rm -f ${REM_GZ_LST}
 else
-    echo 'Nothing to remove.'
     log 'Nothing to remove.'
 fi
 
 # getting latest archive to enc
 LATEST_GZIP=$(ls -t $PWD/bck/* | awk 'NR==1')
 LATEST_NAME=$(ls -t ./bck | awk 'NR==1')
-echo "Latest - ${LATEST_NAME}"
 log "Latest - ${LATEST_NAME}"
 
 # check if archive is present in archiving registry(reg.lst)
 REG_CHECK=$(grep "$LATEST_NAME" ./reg/reg.lst)
 if [[ ! -z ${REG_CHECK// } ]]; then
-    echo "Already enc'ted ${LATEST_NAME}. Exiting."
     log "Already enc'ted ${LATEST_NAME}. Exiting."
     log "--- Ending session"
     exit 0
 fi
 
 # enc
-log "Starting to enc $LATEST_GZIP"
+log "Starting to enc $LATEST_NAME"
 openssl smime -encrypt -aes256 -in ${LATEST_GZIP} -binary -outform DEM -out ./enc/${LATEST_NAME}.enc bckpub.pem
+log "${LATEST_NAME} encted successfuly."
 
 reg "$LATEST_NAME"
 log "--- Ending session"
