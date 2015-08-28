@@ -45,7 +45,7 @@ fi
 
 # getting latest archive to enc
 LATEST_GZIP=$(ls -t ${BCK_DIR}/* | awk 'NR==1')
-LATEST_NAME=$(ls -t ${BCK_DIR}/* | awk 'NR==1')
+LATEST_NAME=$(ls -t ${BCK_DIR} | awk 'NR==1')
 if [[ ! -f $LATEST_GZIP ]]; then log "$LATEST_GZIP is not a file, exiting..." ; fi
 if [[ ! -f $LATEST_NAME ]]; then log "$LATEST_NAME is not a file, exiting..." ; fi
 
@@ -65,7 +65,7 @@ fi
 
 # enc
 log "Starting to enc $LATEST_NAME"
-openssl smime -encrypt -aes256 -in ${LATEST_GZIP} -binary -outform DEM -out ./enc/${LATEST_NAME}.enc bckpub.pem
+openssl smime -encrypt -aes256 -in ${LATEST_GZIP} -binary -outform DEM -out "${ENC_DIR}/${LATEST_NAME}.enc" bckpub.pem
 log "${LATEST_NAME} encted successfuly."
 
 reg "$LATEST_NAME"
