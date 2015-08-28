@@ -46,7 +46,11 @@ LATEST_NAME=$(ls -t ${BCK_DIR} | awk 'NR==1')
 log "Latest - ${LATEST_NAME}"
 
 # check if archive is present in archiving registry(reg.lst)
-REG_CHECK=$(grep "$LATEST_NAME" ./reg/reg.lst)
+if [[ -f ./reg/reg.lst ]]; then
+    REG_CHECK=$(grep "$LATEST_NAME" ./reg/reg.lst)
+else
+    touch ./reg/reg.lst
+fi
 if [[ ! -z ${REG_CHECK// } ]]; then
     log "Already enc'ted ${LATEST_NAME}. Exiting."
     log "--- Ending session"
