@@ -28,7 +28,7 @@ fi
 # clearing stored enc'ted files
 log "Checking for .enc to remove"
 if [[ ${HOLD_ENC} -le 1 ]]; then
-    log "Storing one enc, so clearing enc dir: ${ENC_DIR}"
+    log "Storing one enc, so clearing enc dir: ${ENC_DIR}/"
     rm -f ${ENC_DIR}/*
 else
     REM_ENC_LST=$(ls -t ${ENC_DIR}/* | awk "NR>${HOLD_ENC}")
