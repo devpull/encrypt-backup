@@ -6,8 +6,8 @@ HOLD_BCKS=3
 # number of enc'ted archives to store(newest stays)
 HOLD_ENC=1
 # raw storage
-BCK_DIR='/d/www/encr_bck/bck'
+BCK_DIR='./bck'
 # enc storage
-ENC_DIR='/d/www/encr_bck/enc'
+ENC_DIR='./enc'
 #
 # fnoc

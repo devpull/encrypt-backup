@@ -1,6 +1,10 @@
 #!/bin/bash
 # encrypting archives
 
+# logs & registry dirsç
+if [[ ! -d logs ]]; then mkdir logs ; fi
+if [[ ! -d reg ]]; then mkdir reg ; fi
+
 # inc
 . ./log.sh
 . ./reg.sh
@@ -12,8 +16,6 @@ log "+++ Starting session"
 # required dirs
 if [[ ! -d ${BCK_DIR} ]]; then mkdir ${BCK_DIR} ; fi
 if [[ ! -d ${ENC_DIR} ]]; then mkdir ${ENC_DIR} ; fi
-if [[ ! -d logs ]]; then mkdir logs ; fi
-if [[ ! -d reg ]]; then mkdir reg ; fi
 
 # we only need last $HOLD_BCKS newest files in bck directory
 # sorted by modified time
