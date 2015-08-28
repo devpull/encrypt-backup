@@ -5,7 +5,8 @@
 . ./log.sh
 . ./reg.sh
 . ./conf.sh
-
+echo "pwd:\n"
+echo $PWD
 log "+++ Starting session"
 
 # required dirs
@@ -42,7 +43,7 @@ fi
 
 # getting latest archive to enc
 LATEST_GZIP=$(ls -t ${BCK_DIR}/* | awk 'NR==1')
-LATEST_NAME=$(ls -t ${BCK_DIR} | awk 'NR==1')
+LATEST_NAME=$(ls -t ${BCK_DIR}/* | awk 'NR==1')
 log "Latest - ${LATEST_NAME}"
 
 # check if archive is present in archiving registry(reg.lst)
