@@ -79,7 +79,7 @@ log "Starting to enc $LATEST_NAME"
 # 1. gen key for archive
 openssl rand -base64 32 -out ${ENC_DIR}/${LATEST_NAME}.key
 # 2. enc archive with key
-penssl enc -aes-256-cbc -salt -in "${LATEST_GZIP}" -out "${ENC_DIR}/${LATEST_NAME}.enc" -pass file:${ENC_DIR}/${LATEST_NAME}.key
+openssl enc -aes-256-cbc -salt -in "${LATEST_GZIP}" -out "${ENC_DIR}/${LATEST_NAME}.enc" -pass file:${ENC_DIR}/${LATEST_NAME}.key
 # 3. enc key for that archive
 openssl rsautl -encrypt -inkey public.pem -pubin -in "${ENC_DIR}/${LATEST_NAME}.key" -out "${ENC_DIR}/${LATEST_NAME}.key.enc"
 # 4. removinng unenc'ted key
