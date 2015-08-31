@@ -62,12 +62,13 @@ log "Latest - ${LATEST_NAME}"
 
 # check if archive is present in archiving registry(reg.lst)
 if [[ -f ./reg/reg.lst ]]; then
-    REG_CHECK=$(grep "$LATEST_NAME" ./reg/reg.lst)
+    MD5SUM=$(md5sum ${LATEST_GZIP})
+    REG_CHECK=$(grep "$MD5SUM" ./reg/reg.lst)
 else
     touch ./reg/reg.lst
 fi
 if [[ ! -z ${REG_CHECK// } ]]; then
-    log "Already enc'ted ${LATEST_NAME}. Exiting."
+    log "Already enc'ted ${LATEST_NAME}::{$MD5SUM}. Exiting."
     log "--- Ending session"
     exit 0
 fi
@@ -85,6 +86,6 @@ openssl rsautl -encrypt -inkey public.pem -pubin -in "${ENC_DIR}/${LATEST_NAME}.
 rm -f ${ENC_DIR}/${LATEST_NAME}.key
 log "${LATEST_NAME} encted successfuly."
 
-# registering latest name TODO: do with md5sum
+# registering latest name
 reg "$LATEST_NAME"
 log "--- Ending session"
