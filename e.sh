@@ -64,13 +64,13 @@ log "Checking register..."
 # check if archive is present in archiving registry(reg.lst)
 if [[ -f ./reg/reg.lst ]]; then
     MD5SUMFULL=$(md5sum ${LATEST_GZIP})
-    MD5SUM=( "$MD5SUM" )
-    REG_CHECK=$(grep "$MD5SUM" ./reg/reg.lst)
+    MD5SUM=(${MD5SUMFULL})
+    REG_CHECK=$(grep -e $MD5SUM ./reg/reg.lst)
 else
     touch ./reg/reg.lst
 fi
 if [[ ! -z ${REG_CHECK// } ]]; then
-    log "Already enc'ted ${LATEST_GZIP}::{$MD5SUM}. Exiting."
+    log "Already enc'ted $LATEST_GZIP md5sum: $MD5SUM Exiting."
     log "--- Ending session"
     exit 0
 fi
