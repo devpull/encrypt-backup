@@ -54,8 +54,8 @@ fi
 # getting latest archive to enc
 LATEST_GZIP=$(ls -t ${BCK_DIR}/* | awk 'NR==1')
 LATEST_NAME=$(ls -t ${BCK_DIR} | awk 'NR==1')
-if [[ ! -f $LATEST_GZIP ]]; then log "$LATEST_GZIP is not a file, exiting..." ; exit 0 ; fi
-if [[ ! -f $LATEST_NAME ]]; then log "$LATEST_NAME is not a file, exiting..." ; exit 0 ; fi
+if [[ ! -f ${LATEST_GZIP} ]]; then log "$LATEST_GZIP is not a file, exiting..." ; exit 0 ; fi
+
 
 log "Latest - ${LATEST_NAME}"
 
