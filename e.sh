@@ -58,11 +58,13 @@ if [[ ! -f ${LATEST_GZIP} ]]; then log "$LATEST_GZIP is not a file, exiting..." 
 
 
 log "Latest - ${LATEST_NAME}"
+log "Checking register..."
 
 
 # check if archive is present in archiving registry(reg.lst)
 if [[ -f ./reg/reg.lst ]]; then
-    MD5SUM=$(md5sum ${LATEST_GZIP})
+    MD5SUM=($(md5sum ${LATEST_GZIP}))
+    MD5SUMFULL=($(md5sum ${LATEST_GZIP}))
     REG_CHECK=$(grep "$MD5SUM" ./reg/reg.lst)
 else
     touch ./reg/reg.lst
@@ -77,15 +79,16 @@ fi
 # enc
 log "Starting to enc $LATEST_NAME"
 # 1. gen key for archive
-openssl rand -base64 32 -out ${ENC_DIR}/${LATEST_NAME}.key
+openssl rand -base64 32 -out ${LATEST_NAME}.key
 # 2. enc archive with key
-openssl enc -aes-256-cbc -salt -in "${LATEST_GZIP}" -out "${ENC_DIR}/${LATEST_NAME}.enc" -pass file:${ENC_DIR}/${LATEST_NAME}.key
+openssl enc -aes-256-cbc -salt -in "${LATEST_GZIP}" -out "${ENC_DIR}/${LATEST_NAME}.enc" -pass file:${LATEST_NAME}.key
 # 3. enc key for that archive
-openssl rsautl -encrypt -inkey public.pem -pubin -in "${ENC_DIR}/${LATEST_NAME}.key" -out "${ENC_DIR}/${LATEST_NAME}.key.enc"
+openssl rsautl -encrypt -inkey public.pem -pubin -in "${LATEST_NAME}.key" -out "${ENC_DIR}/${LATEST_NAME}.key.enc"
 # 4. removinng unenc'ted key
-rm -f ${ENC_DIR}/${LATEST_NAME}.key
+rm -f ${LATEST_NAME}.key
 log "${LATEST_NAME} encted successfuly."
 
+
 # registering latest name
-reg "$MD5SUM"
+reg "$MD5SUMFULL"
 log "--- Ending session"
