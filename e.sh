@@ -52,8 +52,8 @@ fi
 
 
 # getting latest archive to enc
-LATEST_GZIP=$(ls -t ${BCK_DIR}/* | awk 'NR==1')
-LATEST_NAME=$(ls -t ${BCK_DIR} | awk 'NR==1')
+LATEST_GZIP=$(ls -t ${BCK_DIR}/*.tar.gz | awk 'NR==1')
+LATEST_NAME=$(ls -t -I '*.key.enc' ${BCK_DIR} | awk 'NR==1')
 if [[ ! -f $LATEST_GZIP ]]; then log "$LATEST_GZIP is not a file, exiting..." ; fi
 if [[ ! -f $LATEST_NAME ]]; then log "$LATEST_NAME is not a file, exiting..." ; fi
 
@@ -87,5 +87,5 @@ rm -f ${ENC_DIR}/${LATEST_NAME}.key
 log "${LATEST_NAME} encted successfuly."
 
 # registering latest name
-reg "$LATEST_NAME"
+reg "$MD5SUM"
 log "--- Ending session"
