@@ -22,7 +22,7 @@ log "+++ Starting session"
 # we only need last $HOLD_BCKS newest files in bck directory
 # sorted by modified time
 log "Checking for gzip's to remove"
-REM_GZ_LST=$(ls -t ${BCK_DIR}/*.tar.gz | awk "NR>${HOLD_BCKS}")
+REM_GZ_LST=$(ls -t ${BCK_DIR}/* | awk "NR>${HOLD_BCKS}")
 if [[ ! -z ${REM_GZ_LST// } ]]; then
     log $'Removing...\n'"$REM_GZ_LST"
     rm -f ${REM_GZ_LST}
@@ -54,8 +54,8 @@ fi
 # getting latest archive to enc
 LATEST_GZIP=$(ls -t ${BCK_DIR}/* | awk 'NR==1')
 LATEST_NAME=$(ls -t ${BCK_DIR} | awk 'NR==1')
-if [[ ! -f $LATEST_GZIP ]]; then log "$LATEST_GZIP is not a file, exiting..." ; fi
-if [[ ! -f $LATEST_NAME ]]; then log "$LATEST_NAME is not a file, exiting..." ; fi
+if [[ ! -f $LATEST_GZIP ]]; then log "$LATEST_GZIP is not a file, exiting..." ; exit 0 ; fi
+if [[ ! -f $LATEST_NAME ]]; then log "$LATEST_NAME is not a file, exiting..." ; exit 0 ; fi
 
 log "Latest - ${LATEST_NAME}"
 
