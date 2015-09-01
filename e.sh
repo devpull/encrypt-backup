@@ -31,26 +31,6 @@ else
 fi
 
 
-# enc dir
-# clearing stored enc'ted archives && enc'ted keys
-log "Checking for .enc archives to remove"
-REM_ENC_LST=$(ls -t ${ENC_DIR}/*.tar.gz.enc | awk "NR>${HOLD_ENC}")
-if [[ $(ls ${ENC_DIR}) != "" && ! -z ${REM_ENC_LST// } ]]; then
-    log $'Removing...\n'"$REM_ENC_LST"
-    rm -f ${REM_ENC_LST}
-else
-    log "Nothing to remove in enc: ${ENC_DIR}"
-fi
-log "Checking for .enc keys to remove"
-REM_KEY_LST=$(ls -t ${ENC_DIR}/*.key.enc | awk "NR>${HOLD_ENC}")
-if [[ $(ls ${ENC_DIR}) != "" && ! -z ${REM_KEY_LST// } ]]; then
-    log $'Removing keys...\n'"$REM_ENC_LST"
-    rm -f ${REM_KEY_LST}
-else
-    log "No keys to remove in enc: ${ENC_DIR}"
-fi
-
-
 # getting latest archive to enc
 LATEST_GZIP=$(ls -t ${BCK_DIR}/* | awk 'NR==1')
 LATEST_NAME=$(ls -t ${BCK_DIR} | awk 'NR==1')
@@ -87,6 +67,26 @@ openssl rsautl -encrypt -inkey public.pem -pubin -in "${LATEST_NAME}.key" -out "
 # 4. removinng unenc'ted key
 rm -f ${LATEST_NAME}.key
 log "${LATEST_NAME} encted successfuly."
+
+
+# enc dir
+# clearing stored enc'ted archives && enc'ted keys
+log "Checking for .enc archives to remove"
+REM_ENC_LST=$(ls -t ${ENC_DIR}/*.tar.gz.enc | awk "NR>${HOLD_ENC}")
+if [[ $(ls ${ENC_DIR}) != "" && ! -z ${REM_ENC_LST// } ]]; then
+    log $'Removing...\n'"$REM_ENC_LST"
+    rm -f ${REM_ENC_LST}
+else
+    log "Nothing to remove in enc: ${ENC_DIR}"
+fi
+log "Checking for .enc keys to remove"
+REM_KEY_LST=$(ls -t ${ENC_DIR}/*.key.enc | awk "NR>${HOLD_ENC}")
+if [[ $(ls ${ENC_DIR}) != "" && ! -z ${REM_KEY_LST// } ]]; then
+    log $'Removing keys...\n'"$REM_ENC_LST"
+    rm -f ${REM_KEY_LST}
+else
+    log "No keys to remove in enc: ${ENC_DIR}"
+fi
 
 
 # registering latest name
