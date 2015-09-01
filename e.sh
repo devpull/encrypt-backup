@@ -23,7 +23,7 @@ log "+++ Starting session"
 # sorted by modified time
 log "Checking for gzip's to remove"
 REM_GZ_LST=$(ls -t ${BCK_DIR}/* | awk "NR>${HOLD_BCKS}")
-if [[ ! -z ${REM_GZ_LST// } ]]; then
+if [[ ls ${ENC_DIR} != "" && ! -z ${REM_GZ_LST// } ]]; then
     log $'Removing...\n'"$REM_GZ_LST"
     rm -f ${REM_GZ_LST}
 else
@@ -34,16 +34,16 @@ fi
 # enc dir
 # clearing stored enc'ted archives && enc'ted keys
 log "Checking for .enc archives to remove"
-REM_ENC_LST=$(ls -t -I '*.key.enc' -I '*.key' ${ENC_DIR} | awk "NR>${HOLD_ENC}")
-if [[ ! -z ${REM_ENC_LST// } ]]; then
+REM_ENC_LST=$(ls -t ${ENC_DIR}/*.tar.gz.enc | awk "NR>${HOLD_ENC}")
+if [[ ls ${ENC_DIR} != "" && ! -z ${REM_ENC_LST// } ]]; then
     log $'Removing...\n'"$REM_ENC_LST"
     rm -f ${REM_ENC_LST}
 else
     log "Nothing to remove in enc: ${ENC_DIR}"
 fi
 log "Checking for .enc keys to remove"
-REM_KEY_LST=$(ls -t -I '*.tar.gz.enc' ${ENC_DIR} | awk "NR>${HOLD_ENC}")
-if [[ ! -z ${REM_KEY_LST// } ]]; then
+REM_KEY_LST=$(ls -t ${ENC_DIR}/*.key.enc | awk "NR>${HOLD_ENC}")
+if [[ ls ${ENC_DIR} != "" && ! -z ${REM_KEY_LST// } ]]; then
     log $'Removing keys...\n'"$REM_ENC_LST"
     rm -f ${REM_KEY_LST}
 else
